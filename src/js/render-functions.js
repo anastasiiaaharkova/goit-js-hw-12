@@ -5,6 +5,7 @@ const gallery = document.querySelector('.gallery');
 
 const lightbox = new SimpleLightbox('.gallery a');
 
+
 export function createGallery(images) {
   const markup = images
     .map(
