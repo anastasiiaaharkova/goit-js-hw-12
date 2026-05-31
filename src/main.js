@@ -9,6 +9,8 @@ import {
   clearGallery,
   showLoader,
   hideLoader,
+  hideLoadMoreButton,
+  updateLoadMoreState,
 } from './js/render-functions';
 
 const form = document.querySelector('.form');
@@ -59,7 +61,7 @@ async function handleSubmit(event) {
     }
 
     createGallery(images);
-    updateLoadMoreState();
+    updateLoadMoreState(currentPage, totalHits);
   } catch (error) {
     iziToast.error({
       message: 'Something went wrong!',
@@ -98,7 +100,7 @@ async function handleLoadMore() {
 
     createGallery(images);
     smoothScrollAfterLoad();
-    updateLoadMoreState();
+    updateLoadMoreState(currentPage, totalHits);
   } catch (error) {
     iziToast.error({
       message: 'Something went wrong!',
@@ -108,33 +110,6 @@ async function handleLoadMore() {
     console.error(error);
   } finally {
     hideLoader();
-  }
-}
-
-function hideLoadMoreButton() {
-  loadMoreBtn.classList.add('hidden');
-}
-
-function showLoadMoreButton() {
-  loadMoreBtn.classList.remove('hidden');
-}
-
-function updateLoadMoreState() {
-  const perPage = getPerPage();
-  const isEndOfCollection = currentPage * perPage >= totalHits;
-
-  if (totalHits > 0 && !isEndOfCollection) {
-    showLoadMoreButton();
-    return;
-  }
-
-  hideLoadMoreButton();
-
-  if (totalHits > 0 && isEndOfCollection) {
-    iziToast.info({
-      message: "We're sorry, but you've reached the end of search results.",
-      position: 'topRight',
-    });
   }
 }
 

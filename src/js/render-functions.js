@@ -1,7 +1,11 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+import { getPerPage } from './pixabay-api';
 
 const gallery = document.querySelector('.gallery');
+const loadMoreBtn = document.querySelector('.load-more');
 
 const lightbox = new SimpleLightbox('.gallery a');
 
@@ -46,3 +50,35 @@ export function showLoader() {
 export function hideLoader() {
   document.querySelector('.loader').classList.add('hidden');
 }
+
+export function showLoadMore() {
+  loadMoreBtn?.classList.remove('hidden');
+}
+
+export function hideLoadMore() {
+  loadMoreBtn?.classList.add('hidden');
+}
+
+export const showLoadMoreButton = showLoadMore;
+export const hideLoadMoreButton = hideLoadMore;
+
+export function updateLoadMoreState(currentPage, totalHits) {
+  const perPage = getPerPage();
+  const isEndOfCollection = currentPage * perPage >= totalHits;
+
+  if (totalHits > 0 && !isEndOfCollection) {
+    showLoadMoreButton();
+    return;
+  }
+
+  hideLoadMoreButton();
+
+  if (totalHits > 0 && isEndOfCollection) {
+    iziToast.info({
+      message: "We're sorry, but you've reached the end of search results.",
+      position: 'topRight',
+    });
+  }
+}
+
+
