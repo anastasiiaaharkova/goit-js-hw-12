@@ -1,4 +1,4 @@
-<h1> **Image search library** </h1>
+**<h1> Image search library </h1>**
 
 An app for image search with an external photo backend and implemented pagination. 
 
